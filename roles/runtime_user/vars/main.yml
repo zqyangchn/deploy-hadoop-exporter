@@ -1,0 +1,4 @@
+---
+
+# password created with: openssl passwd -1 password
+user_passwd: $1$OJ8vzzoE$0Lt0JdIlk0OkRLF6vpSQv1

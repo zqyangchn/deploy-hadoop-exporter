@@ -1,0 +1,8 @@
+---
+
+- name: restart hadoop-exporter
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: hadoop-exporter
+    enabled: yes

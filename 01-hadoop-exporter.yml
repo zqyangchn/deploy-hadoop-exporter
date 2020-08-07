@@ -1,0 +1,9 @@
+---
+# ....
+- hosts: hadoop
+  become: True
+  become_user: root
+  
+  roles:
+    - role: runtime_user
+    - role: hadoop_exporter

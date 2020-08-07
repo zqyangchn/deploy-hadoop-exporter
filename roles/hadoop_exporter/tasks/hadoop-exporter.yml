@@ -1,0 +1,35 @@
+---
+
+- name: Create Require Directory 
+  file:
+    path: "{{ item }}"
+    owner: "{{ runtime_user }}"
+    group: "{{ runtime_user }}"                                                                                                                                                                                                                        
+    mode: 0700
+    state: directory
+  with_items:
+    - "{{ install_base_directory }}/hadoop-exporter"
+    - "{{ hadoop_log_directory }}"
+
+- name: Copy hadoop_exporter
+  copy:
+    src: "hadoop_exporter"
+    dest: "{{ install_base_directory }}/hadoop-exporter/hadoop_exporter"
+    owner: "{{ runtime_user }}"
+    group: "{{ runtime_user }}"
+    mode: '0755'
+
+- name: Instance hadoop-exporter.service
+  template:
+    src: hadoop-exporter.service.j2
+    dest: "/lib/systemd/system/hadoop-exporter.service"
+    mode: 0644
+  notify: restart hadoop-exporter
+
+- name: Generate hadoop-exporter-service.yaml For kubernetes
+  template:
+    src: hadoop-exporter-service.yaml.j2
+    dest: "{{ install_base_directory }}/hadoop-exporter/hadoop-exporter-service.yaml"
+    mode: 0644
+  run_once: true
+  delegate_to: "{{ groups['hadoop_master'] | first }}"

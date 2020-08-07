@@ -1,0 +1,30 @@
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: prometheus-hadoop-exporter
+  namespace: morefun-pro
+subsets: {% for host in groups['hadoop'] %}                                                                                                                                                                                                                  
+  - addresses:
+      - ip: {{ host }}
+    ports:
+      - port: 18428 {% endfor %}
+
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: prometheus-hadoop-exporter 
+  namespace: morefun-pro
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "18428"
+    prometheus.io/path: "/metrics"
+spec:
+  clusterIP: None
+  ports:
+    - name: hadoop-exporter-http
+      protocol: TCP
+      port: 18428
+      targetPort: 18428

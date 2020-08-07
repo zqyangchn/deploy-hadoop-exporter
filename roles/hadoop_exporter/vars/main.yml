@@ -1,0 +1,4 @@
+---
+
+install_base_directory: /opt
+hadoop_log_directory: /var/log/hadoop-exporter

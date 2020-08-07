@@ -1,0 +1,10 @@
+---
+
+- name: Create Runtime User << {{ runtime_user }} >>
+  user: 
+    name={{ runtime_user }}
+    append=yes
+    password={{ user_passwd }}
+    createhome=no
+    shell=/sbin/nologin
+    comment='Runtime User, No Login'

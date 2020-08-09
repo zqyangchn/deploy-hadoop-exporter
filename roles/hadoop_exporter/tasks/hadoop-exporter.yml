@@ -26,6 +26,12 @@
     mode: 0644
   notify: restart hadoop-exporter
 
+- name: Restart hadoop-exporter.service
+  systemd:
+    state: restarted
+    name: hadoop-exporter
+  when: update_hadoop_exporter is defined
+
 - name: Generate hadoop-exporter-service.yaml For kubernetes
   template:
     src: hadoop-exporter-service.yaml.j2

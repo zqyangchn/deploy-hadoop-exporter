@@ -1,0 +1,9 @@
+---
+# ....
+- hosts: hbase
+  become: True
+  become_user: root
+  
+  roles:
+    - role: runtime_user
+    - role: hbase_exporter

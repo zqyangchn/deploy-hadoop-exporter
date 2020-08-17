@@ -1,0 +1,4 @@
+---
+
+install_base_directory: /opt
+hbase_log_directory: /var/log/hbase-exporter

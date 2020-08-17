@@ -1,0 +1,30 @@
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: prometheus-hbase-exporter
+  namespace: morefun-pro
+subsets: {% for host in groups['hbase'] %}                                                                                                                                                                                                                  
+  - addresses:
+      - ip: {{ host }}
+    ports:
+      - port: 8428 {% endfor %}
+
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: prometheus-hbase-exporter 
+  namespace: morefun-pro
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8428"
+    prometheus.io/path: "/metrics"
+spec:
+  clusterIP: None
+  ports:
+    - name: hbase-exporter-http
+      protocol: TCP
+      port: 8428
+      targetPort: 8428

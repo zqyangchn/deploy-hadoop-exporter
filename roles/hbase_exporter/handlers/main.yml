@@ -1,0 +1,8 @@
+---
+
+- name: restart hbase-exporter
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: hbase-exporter
+    enabled: yes

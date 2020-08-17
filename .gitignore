@@ -1,1 +1,2 @@
 roles/hadoop_exporter/files/hadoop_exporter
+roles/hbase_exporter/files/hbase_exporter

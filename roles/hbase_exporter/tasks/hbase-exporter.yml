@@ -1,0 +1,41 @@
+---
+
+- name: Create Require Directory 
+  file:
+    path: "{{ item }}"
+    owner: "{{ runtime_user }}"
+    group: "{{ runtime_user }}"                                                                                                                                                                                                                        
+    mode: 0700
+    state: directory
+  with_items:
+    - "{{ hbase_log_directory }}"
+    - "{{ install_base_directory }}/hbase-exporter"
+
+- name: Copy hbase_exporter
+  copy:
+    src: "hbase_exporter"
+    dest: "{{ install_base_directory }}/hbase-exporter/hbase_exporter"
+    owner: "{{ runtime_user }}"
+    group: "{{ runtime_user }}"
+    mode: '0755'
+
+- name: Instance hbase-exporter.service
+  template:
+    src: hbase-exporter.service.j2
+    dest: "/lib/systemd/system/hbase-exporter.service"
+    mode: 0644
+  notify: restart hbase-exporter
+
+- name: Restart hbase-exporter.service
+  systemd:
+    state: restarted
+    name: hbase-exporter
+  when: update_hbase_exporter is defined
+
+- name: Generate hbase-exporter-service.yaml For kubernetes
+  template:
+    src: hbase-exporter-service.yaml.j2
+    dest: "{{ install_base_directory }}/hbase-exporter/hbase-exporter-service.yaml"
+    mode: 0644
+  run_once: true
+  delegate_to: "{{ groups['hbase_master'] | first }}"

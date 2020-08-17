@@ -1,0 +1,25 @@
+[Unit]
+Description=HBase Exporter For Prometheus
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+
+LimitNOFILE=65536
+LimitNPROC=infinity
+LimitCORE=infinity
+LimitSTACK=infinity
+LimitMEMLOCK=infinity
+
+ExecStart=/opt/hbase-exporter/hbase_exporter \
+    -ListenUri {{ inventory_hostname }}:8428 \
+    -Role {{ role }} \
+    -Uri http://{{ inventory_hostname }}:{{ jmx_port }} \
+    -LogLevel info -LogOutput file -LogOutputFile {{ hbase_log_directory }}/hbase-exporter.log
+
+User={{ runtime_user }}
+Group={{ runtime_user }}
+ 
+[Install]
+WantedBy=multi-user.target
